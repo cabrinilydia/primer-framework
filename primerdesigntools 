@@ -1,0 +1,69 @@
+# PRIMER DESIGN FRAMEWORK TOOL TABLE
+
+This table organizes primer design tools by their role in a modular primer design framework, from sequence input/alignment through candidate generation, specificity filtering, and assay-set optimization.
+
+---
+
+## 🔹 Stage 1 — Input / Alignment
+
+| Tool / implementation | CLI? | Input types | Outputs | Stage fit | Strengths / limitations | Example command snippet |
+|----------------------|------|------------|----------|------------|--------------------------|--------------------------|
+| MAFFT | Yes | FASTA sequences | MSA (FASTA/other formats) | Stage 1 | Fast C implementation; auto strategy selection; multithreading support | `mafft --auto input.fasta > aligned.fasta` |
+| Clustal Omega (`clustalo`) | Yes | FASTA sequences (3+ sequences) | MSA output file | Stage 1 | Parallelized; widely used; scalable | `clustalo -i input.fasta -o aligned.fasta --threads=8` |
+
+---
+
+## 🔹 Stage 2 — Candidate Generation
+
+| Tool / implementation | CLI? | Input types | Outputs | Stage fit | Strengths / limitations | Example command snippet |
+|----------------------|------|------------|----------|------------|--------------------------|--------------------------|
+| Primer3 (`primer3_core`) | Yes | Boulder-IO formatted input + template + constraints | Primer pairs (text output) | Stage 2 | Gold standard; highly configurable; no built-in specificity | `primer3_core < input.txt > output.txt` |
+| EMBOSS `eprimer3` | Yes | Sequence input | Primer3-style output | Stage 2 | EMBOSS wrapper around Primer3 | `eprimer3 input.fa output.txt` |
+| primer3-py | Yes (Python / scriptable) | Python API with Primer3 parameters | Primer objects + thermo helpers | Stage 2 (+thermo) | Python bindings; good for pipelines; relies on Primer3 core | `import primer3 / primer3.calc_tm(...) / primer3.bindings.design_primers(...)` |
+| PMPrimer | Yes | FASTA (aligned or unaligned) | JSON/CSV primer sets | Stage 2–4 | Conserved-region detection; BLAST integration; multiplex support | `pmprimer -f seqs.fasta` |
+| primerdiffer | Yes | Two genomes (FASTA) + optional VCF | Discriminatory primer sets | Stage 2–3 | Haplotype discrimination; integrates BLAST | `primerdesign.py -g1 genome1.fa -g2 genome2.fa -pos ...` |
+| Primer Prospector | Yes | Aligned FASTA | Primer lists + coverage statistics | Stage 2–3 | Taxonomy-aware; de novo primer discovery | `analyze_primers.py -f targets.fasta -P primers.txt` |
+| PUPpy | Yes | ResultDB.tsv + CDS directory | Primer tables + plots | Stage 2 | Community-specific primer design | `puppy-primers -p group` |
+| DegePrime | Yes (Perl) | Trimmed alignment FASTA | TSV of degenerate primer windows | Stage 2 | Entropy-based degenerate primer design | `perl DegePrime.pl -i trimmed.fasta -d 12 -l 18 -o out.tsv` |
+| HYDEN | Yes | DNA sequences + constraints | Degenerate primer pairs | Stage 2 | Batch CLI program; academic availability |  |
+| PrimalScheme | Yes | FASTA references (viral genomes) | Primer BED/TSV + JSON reports | Stage 2–4 | ARTIC-compatible tiling; greedy approach | `primalscheme multiplex input.fasta` |
+| Olivar | Yes | MSA or reference FASTA | Primer BED + config files | Stage 2–4 | Tiling + specificity + optimization | `olivar build -m input.fasta -o out` |
+| varVAMP | Yes | MSA alignment | Primer schemes | Stage 2–4 | Designed for highly variable viruses | `varvamp tiled alignment.fasta outdir` |
+| NGS-PrimerPlex | Yes | BED + reference genome | Multiplex primer panels | Stage 2–4 | Integrates Primer3 + BWA; high-throughput |Setup: `docker pull aakechin/ngs-primerplex:1.3.4` Usage: `python3 NGS_primerplex.py ...` |
+
+---
+
+## 🔹 Stage 3 — Expensive Filtering / Specificity / In-Silico PCR
+
+| Tool / implementation | CLI? | Input types | Outputs | Stage fit | Strengths / limitations | Example command snippet |
+|----------------------|------|------------|----------|------------|--------------------------|--------------------------|
+| BLAST+ (`makeblastdb`) | Yes | FASTA reference | Local BLAST database | Stage 3 | Custom database preparation | `makeblastdb -in sequences.fasta -dbtype nucl \ -out custom_db -parse_seqids`|
+| BLAST+ (`blastn-short`) | Yes | Primer sequences + BLAST DB | Similarity hits | Stage 3 | Optimized for short sequences | `blastn -task blastn-short -word_size 7 -dust no \ -soft_masking false -penalty -3 -reward 1 \ -gapopen 5 -evalue 1000` |
+| MFEprimer | Yes | Primer FASTA + indexed DB | QC report (GC/Tm/ΔG/binding counts) | Stage 3 | Thermodynamics-aware QC | `mfeprimer index -i genome.fa` then `mfeprimer -i primers.fa -d genome.fa` |
+| ThermonucleotideBLAST (`tntblast`) | Yes | Assay file + DB | Match report | Stage 3 | Thermodynamic specificity search | `tntblast -i query.txt -d db.fa` |
+| UCSC `isPcr` | Yes | Genome DB + primer file | Predicted PCR products | Stage 3 | Widely used in-silico PCR | `isPcr genome.2bit primers.txt out.txt` |
+| Exonerate `ipcress` | Yes | Primer file + sequences | PCR product predictions | Stage 3 | Faster than e-PCR; ambiguity tolerant | `ipcress primers.txt genome.fa` |
+| EMBOSS `primersearch` | Yes | Primer file + FASTA | Amplimer report | Stage 3 | Simple mismatch-tolerant PCR simulation | `primersearch -seqall targets.fa -infile primers.txt` |
+| VirtualPCR | Yes | Config file + FASTA | PCR product predictions | Stage 3 | Handles many primers; memory tuning | `java -jar virtualPCR.jar config.file` |
+
+---
+
+## 🔹 Stage 4 — Assay Set Optimization / Pooling
+
+| Tool / implementation | CLI? | Input types | Outputs | Stage fit | Strengths / limitations | Example command snippet |
+|----------------------|------|------------|----------|------------|--------------------------|--------------------------|
+| multiPrime | Yes (Snakemake) | Config YAML + FASTA | Minimal primer sets | Stage 4 | Explicit minimal-set optimization | `snakemake --configfile multi.yaml --cores 10` |
+| PrimalScheme3 | Yes | MSA + BED | Interaction reports + scheme repair | Stage 3–4 | Dimer interaction detection + repair | `primalscheme3 interactions scheme.bed` |
+| SADDLE (via Olivar) | Embedded | Dimer scoring matrix | Optimized tiling panels | Stage 4 | Simulated annealing optimization | `(invoked within Olivar workflow)` |
+| openPrimeR | R / scriptable | Template sequences and optionally primer sets; FASTA or CSV inputs are supported in the vignette workflows | Multiplex primer sets; analysis/comparison outputs in R | Stage 4 | Set-cover-based multiplex optimization; also analyzes and compares primer sets; not a standalone Unix binary | `library(openPrimeR)` |
+---
+
+## 🔻 Non-CLI Tools (Web / GUI Only)
+
+| Tool / implementation | CLI? | Input types | Outputs | Stage fit | Strengths / limitations | Example command snippet |
+|----------------------|------|------------|----------|------------|--------------------------|--------------------------|
+| Primer-BLAST | No | Template sequence + BLAST DB (server) | Primer pairs + specificity alignments | Stage 2–3 | Primer3 + BLAST server pipeline | `(Web interface)` |
+| Benchling Primer Wizard | No | DNA sequence (UI) | Primer candidates + CSV export | Stage 2–3 | Uses Primer3 algorithm; cloud-based | `(UI export)` |
+| OligoArchitect | No | Input sequence + assay parameters | Primer/probe designs (Excel export) | Stage 2–3 | Beacon Designer backend; web-only | `(Web export)` |
+| Primer Express | No | qPCR assay inputs | Primers/probes | Stage 2 | Desktop GUI; instrument-specific | `(GUI only)` |
+| PrimerQuest (IDT) | No | FASTA / accession / Excel upload | Primer pairs / qPCR assays | Stage 2 | Web-based; batch upload | `(Web interface)` |
