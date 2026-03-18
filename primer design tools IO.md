@@ -36,12 +36,6 @@
 
 
 
-
-
-Here's the clean markdown:
-
----
-
 ## Evidence and Notes
 
 - **Primer3 output:** The run log shows Primer3's Boulder-IO output file with primers. Example log lines:
