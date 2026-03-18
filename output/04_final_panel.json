@@ -1,0 +1,67 @@
+[
+  {
+    "pair_id": "P_019",
+    "left_id": "L_037",
+    "right_id": "R_038",
+    "left_sequence": "ACAAGCCTCACTCCCTTTCG",
+    "right_sequence": "GGCATTTCCAGCAAAGCCAA",
+    "amplicon_size": 290,
+    "tm_diff": 0.0,
+    "off_target_hits": 8,
+    "specificity_score": 0.6,
+    "penalty_score": 0.0,
+    "final_score": 76.0
+  },
+  {
+    "pair_id": "P_026",
+    "left_id": "L_051",
+    "right_id": "R_052",
+    "left_sequence": "TGTACGTGCATGGATTGGCT",
+    "right_sequence": "CAGGCGGTGGTTTAGCACTA",
+    "amplicon_size": 182,
+    "tm_diff": 0.0,
+    "off_target_hits": 8,
+    "specificity_score": 0.6,
+    "penalty_score": 0.0,
+    "final_score": 76.0
+  },
+  {
+    "pair_id": "P_027",
+    "left_id": "L_053",
+    "right_id": "R_054",
+    "left_sequence": "CAAGCCTTACCGCAGAGACA",
+    "right_sequence": "TAGCCCATCTGCCTTGTGTG",
+    "amplicon_size": 155,
+    "tm_diff": 0.0,
+    "off_target_hits": 8,
+    "specificity_score": 0.6,
+    "penalty_score": 0.0,
+    "final_score": 76.0
+  },
+  {
+    "pair_id": "P_028",
+    "left_id": "L_055",
+    "right_id": "R_056",
+    "left_sequence": "CAGGCACCTACACACCTCAG",
+    "right_sequence": "AGCCAATCCATGCACGTACA",
+    "amplicon_size": 202,
+    "tm_diff": 0.0,
+    "off_target_hits": 8,
+    "specificity_score": 0.6,
+    "penalty_score": 0.0,
+    "final_score": 76.0
+  },
+  {
+    "pair_id": "P_041",
+    "left_id": "L_081",
+    "right_id": "R_082",
+    "left_sequence": "TAGTGCTAAACCACCGCCTG",
+    "right_sequence": "CAACTCAAAGCCATGTGCCC",
+    "amplicon_size": 169,
+    "tm_diff": 0.0,
+    "off_target_hits": 8,
+    "specificity_score": 0.6,
+    "penalty_score": 0.0,
+    "final_score": 76.0
+  }
+]

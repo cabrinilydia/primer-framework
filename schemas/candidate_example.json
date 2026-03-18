@@ -1,0 +1,12 @@
+{
+  "candidate_id": "L_001",
+  "sequence": "ACGTACGTACGTACGTACGT",
+  "start": 123,
+  "end": 142,
+  "strand": "+",
+  "length": 20,
+  "gc_percent": 50.0,
+  "tm": 60.2,
+  "source_tool": "primer3",
+  "pair_index": 0
+}

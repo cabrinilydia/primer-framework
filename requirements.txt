@@ -1,0 +1,6 @@
+# Python standard library only — no pip packages required for MVP.
+#
+# External tools (install separately):
+#   mafft         – https://mafft.cbrc.jp/alignment/software/
+#   primer3       – https://github.com/primer3-org/primer3
+#   blast+        – https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html

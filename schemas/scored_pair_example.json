@@ -1,0 +1,13 @@
+{
+  "pair_id": "P_001",
+  "left_id": "L_001",
+  "right_id": "R_004",
+  "left_sequence": "ACGTACGTACGTACGTACGT",
+  "right_sequence": "TGCATGCATGCATGCATGCA",
+  "amplicon_size": 145,
+  "tm_diff": 0.8,
+  "off_target_hits": 2,
+  "specificity_score": 0.93,
+  "penalty_score": 0.0,
+  "final_score": 82.1
+}
